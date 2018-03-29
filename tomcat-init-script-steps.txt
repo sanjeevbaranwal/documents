@@ -1,0 +1,55 @@
+Steps involved in creating service commands for tomcat:
+
+1) login with root user
+2) create a file name with tomcat in /etc/init.d 
+3) Write the below script content in tomcat for
+
+========================================================================
+###export CATALINA_HOME="/usr/local/apache-tomcat-7.0.61"
+## export JAVA_HOME="/usr/local/jdk7"
+export CATALINA_HOME="/opt/tomcat/apache"
+ERROR=0
+case "$1" in
+ start)
+            echo $"Starting Tomcat"
+            sh $CATALINA_HOME/bin/startup.sh
+            ;;
+ stop)
+           echo $"Stopping Tomcat"
+           sh $CATALINA_HOME/bin/shutdown.sh
+           ;;
+ restart)
+           sh $CATALINA_HOME/bin/shutdown.sh
+           sh $CATALINA_HOME/bin/startup.sh
+            ;;
+ *)
+         echo $"Usage: $0 {start|stop|restart}"
+ exit 1
+ ;;
+esac
+
+exit $ERROR
+
+=========================================================================
+
+Note : Some time we need to set JAVA_HOME path in tomcat script
+
+4) chmod 755 /etc/init.d/tomcat
+5) create symbolic link of the tomcat script in rc.d directory
+
+ln -s /etc/init.d/tomcat /etc/rc.d/rc6.d/K26tomcat
+ln -s /etc/init.d/tomcat /etc/rc.d/rc0.d/K26tomcat
+ln -s /etc/init.d/tomcat /etc/rc.d/rc3.d/S81tomcat
+ln -s /etc/init.d/tomcat /etc/rc.d/rc2.d/S81tomcat
+ln -s /etc/init.d/tomcat /etc/rc.d/rc5.d/S81tomcat
+
+
+Now the service command is ready to use.
+
+we can use as below 
+
+service tomcat start|stop|restart
+or 
+/etc/init.d/tomcat start|stop|restart
+
+
